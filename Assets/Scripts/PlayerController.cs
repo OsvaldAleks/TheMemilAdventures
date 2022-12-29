@@ -6,9 +6,14 @@ public class PlayerController : MonoBehaviour
 {
     public float speed = 10;
     public float rotateSpeed = 120;
+    public int score = 0;
+    public ArrayList milestone = new ArrayList(); 
     // Start is called before the first frame update
     void Start()
     {
+        //at what scores should new pathes be layed
+        milestone.Add(1);
+        milestone.Add(3);
         //Debug.Log(tranform.ToString());
     }
 
@@ -21,4 +26,41 @@ public class PlayerController : MonoBehaviour
         transform.Translate(Vector3.forward * dy * Time.deltaTime * speed);
         transform.Rotate(Vector3.up * dx * Time.deltaTime * rotateSpeed);
     }
+
+    void OnCollisionEnter(Collision col) {
+        //increase score if collision object is a cage
+        if (col.gameObject.tag == "Cage") { 
+            score++;
+            //
+            if (milestone.Contains(score))
+            {
+                PathController pathScript = FindClosestPath().GetComponent<PathController>();
+                pathScript.changePosition();
+            }
+
+            //untag cage, so it doesn't give any more points
+            col.gameObject.tag = "Untagged";
+        }
+    }
+
+    public GameObject FindClosestPath()
+    {
+        GameObject[] gos;
+        gos = GameObject.FindGameObjectsWithTag("Path");
+        GameObject closest = null;
+        float distance = Mathf.Infinity;
+        Vector3 position = transform.position;
+        foreach (GameObject go in gos)
+        {
+            Vector3 diff = go.transform.position - position;
+            float curDistance = diff.sqrMagnitude;
+            if (curDistance < distance)
+            {
+                closest = go;
+                distance = curDistance;
+            }
+        }
+        return closest;
+    }
+
 }
