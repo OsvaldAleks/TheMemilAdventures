@@ -32,6 +32,10 @@ public class PlayerController : MonoBehaviour
         if (col.gameObject.tag == "Cage") { 
             score++;
             //
+            if (col.gameObject.transform.Find("lock") != null && col.gameObject.transform.Find("lock").gameObject != null)
+            {
+                Destroy(col.gameObject.transform.Find("lock").gameObject);
+            }
             if (milestone.Contains(score))
             {
                 PathController pathScript = FindClosestPath().GetComponent<PathController>();

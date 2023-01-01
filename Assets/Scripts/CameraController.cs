@@ -6,7 +6,7 @@ public class CameraController : MonoBehaviour
 {
     GameObject player;
     public UnityEngine.Vector3 offset;
-    public float positionDamping = 0.5F;
+    public float positionDamping = 0;
     // Start is called before the first frame update
     void Start()
     {

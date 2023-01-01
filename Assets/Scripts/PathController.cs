@@ -4,29 +4,37 @@ using UnityEngine;
 
 public class PathController : MonoBehaviour
 {
-    public float movementSteps = 100;
     public bool moving = false;
-    public UnityEngine.Vector3 move;
-    public UnityEngine.Vector3 endPos;
+    public float speed;
+    public UnityEngine.Vector3 direction;
+    UnityEngine.Vector3 endPos;
+    private double prevDistance;
 
     // Start is called before the first frame update
     void Start()
     {
-        UnityEngine.Vector3 startPos = transform.Find("start").position;
+        UnityEngine.Vector3 startPos = transform.position;
         endPos = transform.Find("end").position;
-        move = (endPos - startPos)/movementSteps;
+        direction = endPos - startPos;
+        direction = Vector3.Normalize(direction);
+        prevDistance = Mathf.Abs(Vector3.Distance(endPos, transform.position));
+        speed = 3;
     }
 
     // Update is called once per frame
     void Update()
     {
         if (moving) {
-            transform.position += move;
-            movementSteps--;
-            if (movementSteps == 0){
+            Quaternion rotation = transform.localRotation;
+            transform.localRotation = Quaternion.Euler(0, 0, 0);
+            transform.Translate(direction * Time.deltaTime * speed);
+            transform.localRotation = rotation;
+            double distance = Mathf.Abs(Vector3.Distance(endPos, transform.position));
+            if (prevDistance < distance) {
                 moving = false;
-                tag = "Untagged";
+                transform.position = endPos;
             }
+            prevDistance = distance;
         }
     }
 
