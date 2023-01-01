@@ -6,12 +6,13 @@ public class CameraController : MonoBehaviour
 {
     GameObject player;
     public UnityEngine.Vector3 offset;
-    public float positionDamping = 0;
+    public float positionDamping;
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("Player");
         offset = transform.position - player.transform.position;
+        positionDamping = 10F;
     }
 
     // Update is called once per frame

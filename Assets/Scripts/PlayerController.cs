@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 10;
-    public float rotateSpeed = 120;
+    public float speed = 7.5F;
+    public float rotateSpeed = 150;
     public int score = 0;
     public ArrayList milestone = new ArrayList(); 
     // Start is called before the first frame update
@@ -22,9 +22,10 @@ public class PlayerController : MonoBehaviour
     {
         float dx = Input.GetAxis("Horizontal");
         float dy = Input.GetAxis("Vertical");
+        float rotation = Input.GetAxis("Mouse X");
         // Vector3.forward je krajše za Vector3(0, 0, 1)
-        transform.Translate(Vector3.forward * dy * Time.deltaTime * speed);
-        transform.Rotate(Vector3.up * dx * Time.deltaTime * rotateSpeed);
+        transform.Translate(Vector3.forward * dy * Time.deltaTime * speed + Vector3.right * dx * Time.deltaTime * speed/2);
+        transform.Rotate(Vector3.up * rotation * Time.deltaTime * rotateSpeed);
     }
 
     void OnCollisionEnter(Collision col) {
