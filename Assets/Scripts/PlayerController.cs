@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 7.5F;
+    public float speed = 500;
     public float rotateSpeed = 150;
     public int score = 0;
-    public ArrayList milestone = new ArrayList(); 
+    public ArrayList milestone = new ArrayList();
+    Rigidbody rb;
     // Start is called before the first frame update
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
         //at what scores should new pathes be layed
         milestone.Add(1);
         milestone.Add(3);
@@ -21,10 +23,15 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         float dx = Input.GetAxis("Horizontal");
-        float dy = Input.GetAxis("Vertical");
+        float dz = Input.GetAxis("Vertical");
         float rotation = Input.GetAxis("Mouse X");
-        // Vector3.forward je krajše za Vector3(0, 0, 1)
-        transform.Translate(Vector3.forward * dy * Time.deltaTime * speed + Vector3.right * dx * Time.deltaTime * speed/2);
+
+        Vector3 vel = new Vector3(dx, 0, dz) * speed * Time.deltaTime;
+        vel = transform.rotation * vel;
+        rb.velocity = vel + Vector3.up * rb.velocity.y;
+        rb.angularVelocity = new Vector3(0, 0, 0);
+        //Vector3.forward je krajše za Vector3(0, 0, 1)
+        //transform.Translate(Vector3.forward * dy * Time.deltaTime * speed + Vector3.right * dx * Time.deltaTime * speed/2);
         transform.Rotate(Vector3.up * rotation * Time.deltaTime * rotateSpeed);
     }
 

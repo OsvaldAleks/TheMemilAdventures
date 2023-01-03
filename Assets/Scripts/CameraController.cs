@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour
         Vector3 desiredPosition = player.transform.position + (rotation * offset);
         Vector3 position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * positionDamping);
         
-        transform.position = position;
+        transform.position = desiredPosition;
 
         Vector3 interestPosition = player.transform.position - 3*(rotation * offset);
         interestPosition[1] = player.transform.position[1];
