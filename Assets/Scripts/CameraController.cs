@@ -6,13 +6,13 @@ public class CameraController : MonoBehaviour
 {
     GameObject player;
     public UnityEngine.Vector3 offset;
-    public float positionDamping;
+    public float rotateSpeed = 100;
+    Vector3 rotation;
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("Player");
         offset = transform.position - player.transform.position;
-        positionDamping = 10F;
     }
 
     // Update is called once per frame
@@ -22,16 +22,14 @@ public class CameraController : MonoBehaviour
     }
     void LateUpdate()
     {
-        float currentAngle = transform.eulerAngles.y;
-        float desiredAngle = player.transform.eulerAngles.y;
-        Quaternion rotation = Quaternion.Euler(0, desiredAngle, 0);
+        float rotate = Input.GetAxis("Mouse X");
+        rotation = rotation + (Vector3.up * rotate * Time.deltaTime * rotateSpeed);
 
-        Vector3 desiredPosition = player.transform.position + (rotation * offset);
-        Vector3 position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * positionDamping);
-        
+        Vector3 desiredPosition = (player.transform.position + (Quaternion.Euler(rotation) * offset));
+
         transform.position = desiredPosition;
 
-        Vector3 interestPosition = player.transform.position - 3*(rotation * offset);
+        Vector3 interestPosition = player.transform.position - 3 * (Quaternion.Euler(rotation) * offset);
         interestPosition[1] = player.transform.position[1];
         transform.LookAt(interestPosition);
     }

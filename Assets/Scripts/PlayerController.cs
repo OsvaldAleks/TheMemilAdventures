@@ -7,16 +7,20 @@ public class PlayerController : MonoBehaviour
     public float speed = 500;
     public float rotateSpeed = 150;
     public int score = 0;
+    public float movementRotation;
     public ArrayList milestone = new ArrayList();
     Rigidbody rb;
+    GameObject cam;
     // Start is called before the first frame update
     void Start()
     {
+        cam = GameObject.Find("Main Camera");
         rb = GetComponent<Rigidbody>();
         //at what scores should new pathes be layed
         milestone.Add(1);
         milestone.Add(3);
         //Debug.Log(tranform.ToString());
+        movementRotation = cam.transform.eulerAngles.y;
     }
 
     // Update is called once per frame
@@ -24,20 +28,78 @@ public class PlayerController : MonoBehaviour
     {
         float dx = Input.GetAxis("Horizontal");
         float dz = Input.GetAxis("Vertical");
-        float rotation = Input.GetAxis("Mouse X");
-
         Vector3 vel = new Vector3(dx, 0, dz) * speed * Time.deltaTime;
-        vel = transform.rotation * vel;
+
+        if (vel != Vector3.zero)
+        {
+            //rotation of player movement is based on the roatation of the camera
+            movementRotation = cam.transform.eulerAngles.y;
+
+            //rotation of player model is dependent on direction of player movement
+            float goal = cam.transform.eulerAngles.y;
+
+            float turn = 0;
+            //if (dz < 0)
+            //    turn += 180;
+            //else{
+            //    if (dx > 0)
+            //        turn += 90;
+            //    else if (dx < 0)
+            //        turn -= 90;
+            //    if (dz > 0)
+            //        turn /= 2;
+            //}
+            if (dz >= 0)
+            {
+                if (dx > 0)
+                    turn += 90;
+                else if (dx < 0)
+                    turn -= 90;
+                if (dz != 0)
+                    turn /= 2;
+            }
+            else
+            {
+                if (dx > 0)
+                    turn += 135;
+                else if (dx < 0)
+                    turn -= 135;
+                else
+                    turn += 180;
+            }
+
+            goal = (goal + turn + 360) % 360;
+
+            float offset1 = goal - transform.eulerAngles.y;
+            float offset2 = goal + 360 - transform.eulerAngles.y;
+            float offset3 = goal - 360 - transform.eulerAngles.y;
+
+            if (Mathf.Abs(offset1) < Mathf.Abs(offset2) && Mathf.Abs(offset1) < Mathf.Abs(offset3))
+                goal = goal - offset1 * 0.9f;
+            else if (Mathf.Abs(offset2) < Mathf.Abs(offset3))
+                goal = goal - offset2 * 0.9f;
+            else
+                goal = goal - offset3 * 0.9f;
+
+            transform.eulerAngles = new Vector3(
+                transform.eulerAngles.x,
+                goal,
+                transform.eulerAngles.z
+            );
+        }
+
+        vel = Quaternion.Euler(0, movementRotation, 0) * vel;
         rb.velocity = vel + Vector3.up * rb.velocity.y;
         rb.angularVelocity = new Vector3(0, 0, 0);
         //Vector3.forward je krajše za Vector3(0, 0, 1)
         //transform.Translate(Vector3.forward * dy * Time.deltaTime * speed + Vector3.right * dx * Time.deltaTime * speed/2);
-        transform.Rotate(Vector3.up * rotation * Time.deltaTime * rotateSpeed);
     }
 
-    void OnCollisionEnter(Collision col) {
+    void OnCollisionEnter(Collision col)
+    {
         //increase score if collision object is a cage
-        if (col.gameObject.tag == "Cage") { 
+        if (col.gameObject.tag == "Cage")
+        {
             score++;
             //
             if (col.gameObject.transform.Find("lock") != null && col.gameObject.transform.Find("lock").gameObject != null)
