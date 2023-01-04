@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 500;
+    public float speed = 100;
+    public float sprintSpeed = 200;
     public float rotateSpeed = 150;
+    public float jumpForce = 2.0f;
+    public Vector3 jump;
+    public bool isGrounded;
     public int score = 0;
     public float movementRotation;
     public ArrayList milestone = new ArrayList();
@@ -21,6 +25,9 @@ public class PlayerController : MonoBehaviour
         milestone.Add(3);
         //Debug.Log(tranform.ToString());
         movementRotation = cam.transform.eulerAngles.y;
+
+        isGrounded = true;
+        jump = new Vector3(0.0f, 2.0f, 0.0f);
     }
 
     // Update is called once per frame
@@ -28,8 +35,19 @@ public class PlayerController : MonoBehaviour
     {
         float dx = Input.GetAxis("Horizontal");
         float dz = Input.GetAxis("Vertical");
-        Vector3 vel = new Vector3(dx, 0, dz) * speed * Time.deltaTime;
 
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            rb.AddForce(jump * jumpForce, ForceMode.Impulse);
+            isGrounded = false;
+        }
+
+        Vector3 vel;
+        if (Input.GetKeyDown(KeyCode.LeftShift)){
+            vel = new Vector3(dx, 0, dz) * sprintSpeed * Time.deltaTime;
+        }
+        else
+            vel = new Vector3(dx, 0, dz) * speed * Time.deltaTime;
         if (vel != Vector3.zero)
         {
             //rotation of player movement is based on the roatation of the camera
@@ -39,16 +57,6 @@ public class PlayerController : MonoBehaviour
             float goal = cam.transform.eulerAngles.y;
 
             float turn = 0;
-            //if (dz < 0)
-            //    turn += 180;
-            //else{
-            //    if (dx > 0)
-            //        turn += 90;
-            //    else if (dx < 0)
-            //        turn -= 90;
-            //    if (dz > 0)
-            //        turn /= 2;
-            //}
             if (dz >= 0)
             {
                 if (dx > 0)
@@ -75,11 +83,11 @@ public class PlayerController : MonoBehaviour
             float offset3 = goal - 360 - transform.eulerAngles.y;
 
             if (Mathf.Abs(offset1) < Mathf.Abs(offset2) && Mathf.Abs(offset1) < Mathf.Abs(offset3))
-                goal = goal - offset1 * 0.9f;
+                goal = goal - offset1 * 0.8f;
             else if (Mathf.Abs(offset2) < Mathf.Abs(offset3))
-                goal = goal - offset2 * 0.9f;
+                goal = goal - offset2 * 0.8f;
             else
-                goal = goal - offset3 * 0.9f;
+                goal = goal - offset3 * 0.8f;
 
             transform.eulerAngles = new Vector3(
                 transform.eulerAngles.x,
@@ -93,6 +101,7 @@ public class PlayerController : MonoBehaviour
         rb.angularVelocity = new Vector3(0, 0, 0);
         //Vector3.forward je krajše za Vector3(0, 0, 1)
         //transform.Translate(Vector3.forward * dy * Time.deltaTime * speed + Vector3.right * dx * Time.deltaTime * speed/2);
+
     }
 
     void OnCollisionEnter(Collision col)
@@ -115,6 +124,12 @@ public class PlayerController : MonoBehaviour
             //untag cage, so it doesn't give any more points
             col.gameObject.tag = "Untagged";
         }
+    }
+
+    void OnCollisionStay()
+    {
+        if(rb.velocity[1] == 0)
+            isGrounded = true;
     }
 
     public GameObject FindClosestPath()
