@@ -8,9 +8,11 @@ public class PlayerController : MonoBehaviour
     public float sprintSpeed = 200;
     public float rotateSpeed = 150;
     public float jumpForce = 2.0f;
+    public float hp = 10;
+    public Vector3 respawnPoint = new Vector3(0, 0.5f, 0);
     public Vector3 jump;
     public bool isGrounded;
-    public int score = 0;
+    public int score;
     public float movementRotation;
     public ArrayList milestone = new ArrayList();
     Rigidbody rb;
@@ -28,6 +30,8 @@ public class PlayerController : MonoBehaviour
 
         isGrounded = true;
         jump = new Vector3(0.0f, 2.0f, 0.0f);
+
+        score = 0;
     }
 
     // Update is called once per frame
@@ -43,7 +47,7 @@ public class PlayerController : MonoBehaviour
         }
 
         Vector3 vel;
-        if (Input.GetKeyDown(KeyCode.LeftShift)){
+        if (Input.GetKey(KeyCode.LeftShift)){
             vel = new Vector3(dx, 0, dz) * sprintSpeed * Time.deltaTime;
         }
         else
@@ -96,6 +100,14 @@ public class PlayerController : MonoBehaviour
             );
         }
 
+        if (transform.position.y < -20) {
+            hp -= Time.deltaTime * 10;
+        }
+        if (hp <= 0) {
+            hp = 10;
+            transform.position = respawnPoint;
+        }
+        Debug.Log(hp);
         vel = Quaternion.Euler(0, movementRotation, 0) * vel;
         rb.velocity = vel + Vector3.up * rb.velocity.y;
         rb.angularVelocity = new Vector3(0, 0, 0);
