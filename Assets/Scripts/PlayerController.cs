@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public int score;
     public float movementRotation;
     public ArrayList milestone = new ArrayList();
+    public Animator anim;
     Rigidbody rb;
     GameObject cam;
     // Start is called before the first frame update
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
     {
         cam = GameObject.Find("Main Camera");
         rb = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
         //at what scores should new pathes be layed
         milestone.Add(1);
         milestone.Add(3);
@@ -43,15 +45,28 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.AddForce(jump * jumpForce, ForceMode.Impulse);
+            anim.SetBool("isGrounded", false);
             isGrounded = false;
         }
 
         Vector3 vel;
-        if (Input.GetKey(KeyCode.LeftShift)){
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
             vel = new Vector3(dx, 0, dz) * sprintSpeed * Time.deltaTime;
+            anim.SetFloat("speed", 25);
         }
         else
+        {
             vel = new Vector3(dx, 0, dz) * speed * Time.deltaTime;
+            if (vel == Vector3.zero)
+            {
+                anim.SetFloat("speed", 0);
+            }
+            else
+            {
+                anim.SetFloat("speed", 15);
+            }
+        }
         if (vel != Vector3.zero)
         {
             //rotation of player movement is based on the roatation of the camera
@@ -107,7 +122,6 @@ public class PlayerController : MonoBehaviour
             hp = 10;
             transform.position = respawnPoint;
         }
-        Debug.Log(hp);
         vel = Quaternion.Euler(0, movementRotation, 0) * vel;
         rb.velocity = vel + Vector3.up * rb.velocity.y;
         rb.angularVelocity = new Vector3(0, 0, 0);
@@ -140,8 +154,11 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionStay()
     {
-        if(rb.velocity[1] == 0)
+        if (rb.velocity[1] == 0)
+        {
             isGrounded = true;
+            anim.SetBool("isGrounded", true);
+        }
     }
 
     public GameObject FindClosestPath()
