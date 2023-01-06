@@ -53,22 +53,23 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift))
         {
             vel = new Vector3(dx, 0, dz) * sprintSpeed * Time.deltaTime;
-            anim.SetFloat("speed", 25);
         }
         else
         {
             vel = new Vector3(dx, 0, dz) * speed * Time.deltaTime;
-            if (vel == Vector3.zero)
-            {
-                anim.SetFloat("speed", 0);
-            }
-            else
-            {
-                anim.SetFloat("speed", 15);
-            }
+                
         }
         if (vel != Vector3.zero)
         {
+            if (Input.GetKey(KeyCode.LeftShift) && isGrounded)
+            {
+                anim.SetFloat("speed", 25);
+            }
+            else if (isGrounded)
+            {
+                anim.SetFloat("speed", 15);
+            }
+
             //rotation of player movement is based on the roatation of the camera
             movementRotation = cam.transform.eulerAngles.y;
 
@@ -114,6 +115,10 @@ public class PlayerController : MonoBehaviour
                 transform.eulerAngles.z
             );
         }
+        else
+        {
+            anim.SetFloat("speed", 0);
+        }
 
         if (transform.position.y < -20) {
             hp -= Time.deltaTime * 10;
@@ -141,11 +146,11 @@ public class PlayerController : MonoBehaviour
             {
                 Destroy(col.gameObject.transform.Find("lock").gameObject);
             }
-            if (milestone.Contains(score))
-            {
-                PathController pathScript = FindClosestPath().GetComponent<PathController>();
-                pathScript.changePosition();
-            }
+            //if (milestone.Contains(score))
+            //{
+            //    PathController pathScript = FindClosestPath().GetComponent<PathController>();
+            //    pathScript.changePosition();
+            //}
 
             //untag cage, so it doesn't give any more points
             col.gameObject.tag = "Untagged";
@@ -154,7 +159,7 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionStay()
     {
-        if (rb.velocity[1] == 0)
+        if (rb.velocity[1] < 0.5)
         {
             isGrounded = true;
             anim.SetBool("isGrounded", true);
