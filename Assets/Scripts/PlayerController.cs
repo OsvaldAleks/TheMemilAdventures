@@ -144,6 +144,7 @@ public class PlayerController : MonoBehaviour
 
     void Player_Death()
     {
+        anim.SetBool("dead", true);
         //Dead = true;
         DeathScreen.SetActive(true); //menu appears
         Time.timeScale = 0f; //freeze time
@@ -151,6 +152,7 @@ public class PlayerController : MonoBehaviour
     //click Retry button to play the game
     public void Retry()
     {
+        anim.SetBool("dead", false);
         DeathScreen.SetActive(false); //menu disappears
         Time.timeScale = 1f; //unfreeze time
         //Dead = false;
