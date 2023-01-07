@@ -9,6 +9,7 @@ public class PauseMenu : MonoBehaviour
     public static bool Paused = false; //if game is paused or not
     public GameObject PauseMenuCanvas; //reference to Canvas
     public GameObject AboutCanvas;
+    public GameObject gameOverScreen;
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +22,7 @@ public class PauseMenu : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            if(Paused && (AboutCanvas.activeSelf == false))
+            if(Paused && (AboutCanvas.activeSelf == false) && (gameOverScreen.activeSelf == false))
             {
                 Play();
                 Debug.Log("Resume");
