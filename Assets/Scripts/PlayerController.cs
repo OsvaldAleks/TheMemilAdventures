@@ -25,8 +25,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         //at what scores should new pathes be layed
-        milestone.Add(1);
-        milestone.Add(3);
+        milestone.Add(2);
+        milestone.Add(4);
         //Debug.Log(tranform.ToString());
         movementRotation = cam.transform.eulerAngles.y;
 
@@ -146,11 +146,11 @@ public class PlayerController : MonoBehaviour
             {
                 Destroy(col.gameObject.transform.Find("lock").gameObject);
             }
-            //if (milestone.Contains(score))
-            //{
-            //    PathController pathScript = FindClosestPath().GetComponent<PathController>();
-            //    pathScript.changePosition();
-            //}
+            if (milestone.Contains(score))
+            {
+                PathController pathScript = FindClosestPath().GetComponent<PathController>();
+                pathScript.changePosition();
+            }
 
             //untag cage, so it doesn't give any more points
             col.gameObject.tag = "Untagged";

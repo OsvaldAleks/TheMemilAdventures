@@ -13,12 +13,16 @@ public class PathController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        UnityEngine.Vector3 startPos = transform.position;
+        UnityEngine.Vector3 startPos = transform.Find("start").position;
         endPos = transform.Find("end").position;
         direction = endPos - startPos;
+
+        transform.Translate(-direction);
+        
         direction = Vector3.Normalize(direction);
         prevDistance = Mathf.Abs(Vector3.Distance(endPos, transform.position));
         speed = 3;
+        
     }
 
     // Update is called once per frame
