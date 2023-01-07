@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
@@ -18,6 +20,9 @@ public class PlayerController : MonoBehaviour
     public Animator anim;
     Rigidbody rb;
     GameObject cam;
+    public static bool Dead = false; //if player is dead or not
+    public GameObject DeathScreen; 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -123,9 +128,11 @@ public class PlayerController : MonoBehaviour
         if (transform.position.y < -20) {
             hp -= Time.deltaTime * 10;
         }
-        if (hp <= 0) {
-            hp = 10;
-            transform.position = respawnPoint;
+
+        if (hp <= 0 && !Dead) {
+            //display game over screen
+            Player_Death();
+            //hp and position reset moved to Retry() function
         }
         vel = Quaternion.Euler(0, movementRotation, 0) * vel;
         rb.velocity = vel + Vector3.up * rb.velocity.y;
@@ -133,6 +140,23 @@ public class PlayerController : MonoBehaviour
         //Vector3.forward je krajše za Vector3(0, 0, 1)
         //transform.Translate(Vector3.forward * dy * Time.deltaTime * speed + Vector3.right * dx * Time.deltaTime * speed/2);
 
+    }
+
+    void Player_Death()
+    {
+        Dead = true;
+        DeathScreen.SetActive(true); //menu appears
+        Time.timeScale = 0f; //freeze time
+    }
+    //click Retry button to play the game
+    public void Retry()
+    {
+        DeathScreen.SetActive(false); //menu disappears
+        Time.timeScale = 1f; //unfreeze time
+        Dead = false;
+        hp = 10;
+        transform.position = respawnPoint;
+        EventSystem.current.SetSelectedGameObject(null); //so resume button isn't in selected mode
     }
 
     void OnCollisionEnter(Collision col)
