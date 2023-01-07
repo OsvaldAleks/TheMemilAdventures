@@ -11,7 +11,7 @@ public class EnemyAIController : MonoBehaviour
     public float attackRange;
     public float walkPointRange;
     public Vector3 walkPoint; //point that an enemy will walk towards
-    public LayerMask whatIsPlayer, whatIsGround; //variables that start with whatIs = LayerMask variables (apparently)
+    public LayerMask whatIsPlayer, whatIsGround, whatIsObstacle; //variables that start with whatIs = LayerMask variables (apparently)
     private bool isWalkPointSet = false;
 
     void Start()
@@ -43,7 +43,7 @@ public class EnemyAIController : MonoBehaviour
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
         //Is walkPoint outside of the map?
         //arguments - origin of ray, direction of ray, length of ray, what it has to collide with 
-        if (Physics.Raycast(walkPoint, -transform.up, whatIsGround)) {
+        if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround) && !Physics.Raycast(walkPoint, transform.up, 2f, whatIsObstacle) && !Physics.Raycast(walkPoint, -transform.up, 2f, whatIsObstacle)) {
             isWalkPointSet = true;
         }
     }
@@ -59,7 +59,7 @@ public class EnemyAIController : MonoBehaviour
         }
         //When enemy reaches a walkPoint, find a new one
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
-        if (distanceToWalkPoint.magnitude < 1f)
+        if (distanceToWalkPoint.magnitude < 5f)
             isWalkPointSet = false;
     }
 
