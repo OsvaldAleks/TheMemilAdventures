@@ -86,10 +86,11 @@ public class EnemyAIController : MonoBehaviour
             anim.SetBool("isAttacking", true);
 
             Debug.Log("Enemy attacked");
-            player.GetComponent<PlayerController>().TakeDamage(2);
+            
             canAttack = false;
             //call this function after attackDelay time
             Invoke(nameof(ResetAttack), attackDelay);
+            Invoke(nameof(DamagePlayer), 1.5f);
         }
     }
 
@@ -97,5 +98,10 @@ public class EnemyAIController : MonoBehaviour
     {
         anim.SetBool("isAttacking", false);
         canAttack = true;
+    }
+
+    void DamagePlayer()
+    {
+        player.GetComponent<PlayerController>().TakeDamage(2);
     }
 }
