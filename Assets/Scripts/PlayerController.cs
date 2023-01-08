@@ -22,7 +22,9 @@ public class PlayerController : MonoBehaviour
     GameObject cam;
     public static bool Dead = false; //if player is dead or not
     public GameObject DeathScreen; 
-    public HealthBar hpBar; 
+    public HealthBar hpBar;
+    public AudioSource audio;
+    public AudioClip crowd_cheer;
 
 
     // Start is called before the first frame update
@@ -31,6 +33,8 @@ public class PlayerController : MonoBehaviour
         cam = GameObject.Find("Main Camera");
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+        audio = GetComponent<AudioSource>();
+
         //at what scores should new pathes be layed
         milestone.Add(2);
         milestone.Add(4);
@@ -41,6 +45,7 @@ public class PlayerController : MonoBehaviour
         jump = new Vector3(0.0f, 2.0f, 0.0f);
 
         score = 0;
+        crowd_cheer = (AudioClip)Resources.Load("Sound/crowd-cheer");
 
         hpBar.SetHPMax(hp);
     }
@@ -167,7 +172,12 @@ public class PlayerController : MonoBehaviour
         transform.position = respawnPoint;
         EventSystem.current.SetSelectedGameObject(null); //so resume button isn't in selected mode
     }
-
+    public void EndGame()
+    {
+        GetComponent<AudioSource>().clip = crowd_cheer;
+        GetComponent<AudioSource>().loop = false;
+        GetComponent<AudioSource>().Play();
+    }
     void OnCollisionEnter(Collision col)
     {
         //increase score if collision object is a cage
@@ -184,7 +194,10 @@ public class PlayerController : MonoBehaviour
                 PathController pathScript = FindClosestPath().GetComponent<PathController>();
                 pathScript.changePosition();
             }
-
+            if (score == 4)
+            {
+                EndGame();
+            }
             //untag cage, so it doesn't give any more points
             col.gameObject.tag = "Untagged";
         }
