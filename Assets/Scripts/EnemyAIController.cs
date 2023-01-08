@@ -15,11 +15,13 @@ public class EnemyAIController : MonoBehaviour
     private bool isWalkPointSet = false;
     private bool canAttack = true;
     public float attackDelay = 4;
+    public Animator anim;
 
     void Start()
     {
         player = GameObject.Find("Player");
         agent = GetComponent<NavMeshAgent>();
+        anim = GetComponent<Animator>();
     }
 
     void Update()
@@ -52,6 +54,7 @@ public class EnemyAIController : MonoBehaviour
 
     void EnemyPatrolling()
     {
+        anim.SetBool("isChasing", false);
         agent.speed = 4;
         if (isWalkPointSet) {
             agent.SetDestination(walkPoint);
@@ -67,6 +70,7 @@ public class EnemyAIController : MonoBehaviour
 
     void EnemyChasing()
     {
+        anim.SetBool("isChasing", true);
         agent.speed = 10;
         //move towards the player
         agent.SetDestination(player.transform.position);
