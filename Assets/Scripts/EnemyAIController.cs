@@ -17,6 +17,7 @@ public class EnemyAIController : MonoBehaviour
     public float attackDelay = 4;
     public Animator anim;
     public float hp = 3;
+    private bool isDead = false;
 
     void Start()
     {
@@ -27,17 +28,19 @@ public class EnemyAIController : MonoBehaviour
 
     void Update()
     {
-        bool isPlayerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
-        bool isPlayerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
-        //walk around the map without chasing the player
-        if (!isPlayerInSightRange && !isPlayerInAttackRange)
-            EnemyPatrolling();
-        //when a player gets too close to the enemy, it starts chasing him
-        if (isPlayerInSightRange && !isPlayerInAttackRange)
-            EnemyChasing();
-        //when the enemy reaches the player, it stops moving
-        if (isPlayerInAttackRange && isPlayerInSightRange)
-            EnemyAttacking();
+        if(!isDead){
+            bool isPlayerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
+            bool isPlayerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
+            //walk around the map without chasing the player
+            if (!isPlayerInSightRange && !isPlayerInAttackRange)
+                EnemyPatrolling();
+            //when a player gets too close to the enemy, it starts chasing him
+            if (isPlayerInSightRange && !isPlayerInAttackRange)
+                EnemyChasing();
+            //when the enemy reaches the player, it stops moving
+            if (isPlayerInAttackRange && isPlayerInSightRange)
+                EnemyAttacking();
+        }
     }
 
     private void FindWalkPoint()
@@ -106,10 +109,11 @@ public class EnemyAIController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        //anim.SetBool("dead", true);
+        Debug.Log("Enemy hit");
         hp -= damage;
         if (hp <= 0){
-            Debug.Log("Enemy dead");
+            anim.SetBool("isDead", true);
+            isDead = true;
         }
     }
 }
