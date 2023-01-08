@@ -722,9 +722,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Mi\u0161ka Memila je dru\u017Eba zavrgla.\r\nSre\u010Dal je skupino tatov
     in z njimi postal prijatelj.\r\nNa\u0161la jih je kraljeva stra\u017Ea in njegove
-    tovari\u0161e zaprla v kletke.\r\nPomagaj Memilu re\u0161iti negove prijatelje.\n\nW
-    - premik naprej\r\nS - premik nazaj\r\nD - premik desno\r\nA - premik levo\r\nSPACE
-    - skok\r\nMI\u0160KA - obra\u010Danje"
+    tovari\u0161e zaprla v kletke.\r\nPomagaj Memilu re\u0161iti negove prijatelje.\n\nWASD
+    - premikanje igralca\nMI\u0160KA - premikanje kamere\nSHIFT - tek\nSPACE - skok\r\nESC
+    - mani za premor"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
