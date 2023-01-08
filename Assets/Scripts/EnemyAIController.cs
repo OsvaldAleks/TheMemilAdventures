@@ -83,7 +83,8 @@ public class EnemyAIController : MonoBehaviour
 
         if(canAttack){
             //Attack the player
-            
+            anim.SetBool("isAttacking", true);
+
             Debug.Log("Enemy attacked");
             player.GetComponent<PlayerController>().TakeDamage(2);
             canAttack = false;
@@ -92,7 +93,9 @@ public class EnemyAIController : MonoBehaviour
         }
     }
 
-    void ResetAttack(){
+    void ResetAttack()
+    {
+        anim.SetBool("isAttacking", false);
         canAttack = true;
     }
 }
