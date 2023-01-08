@@ -259,7 +259,7 @@ public class PlayerController : MonoBehaviour
     public void Attack(){
         if(canAttack){
             //Attack the player
-            //anim.SetBool("isAttacking", true);
+            anim.SetBool("isAttacking", true);
             Debug.Log("Player attacked");
             canAttack = false;
             //call this function after attackDelay time
@@ -267,7 +267,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void ResetAttack(){
+    void ResetAttack()
+    {
+        anim.SetBool("isAttacking", false);
         canAttack = true;
     }
 
