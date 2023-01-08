@@ -33,6 +33,9 @@ public class PlayerController : MonoBehaviour
     private bool canAttack = true;
     public float attackDelay = 2;
     public GameObject enemy1;
+    public GameObject enemy2;
+    public GameObject enemy3;
+    public int enemyGettingDamaged = 1;
 
 
     // Start is called before the first frame update
@@ -43,6 +46,8 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         audio = GetComponent<AudioSource>();
         enemy1 = GameObject.Find("Enemy 1");
+        enemy2 = GameObject.Find("Enemy 2");
+        enemy3 = GameObject.Find("Enemy 3");
 
         //at what scores should new pathes be layed
         milestone.Add(2);
@@ -268,9 +273,24 @@ public class PlayerController : MonoBehaviour
 
             Vector3 distanceToEnemy = transform.position - enemy1.transform.position;
             if(distanceToEnemy.magnitude < 1f){
-
+                enemyGettingDamaged = 1;
                 Invoke(nameof(DamageEnemy), 1f);
             }
+            else{
+                distanceToEnemy = transform.position - enemy2.transform.position;
+                if(distanceToEnemy.magnitude < 1f){
+                    enemyGettingDamaged = 2;
+                    Invoke(nameof(DamageEnemy), 1f);
+                }
+                else{
+                    distanceToEnemy = transform.position - enemy3.transform.position;
+                    if(distanceToEnemy.magnitude < 1f){
+                        enemyGettingDamaged = 3;
+                        Invoke(nameof(DamageEnemy), 1f);
+                    }
+                }
+            }
+            
         }
     }
 
@@ -281,7 +301,12 @@ public class PlayerController : MonoBehaviour
     }
 
     void DamageEnemy(){
-        enemy1.GetComponent<EnemyAIController>().TakeDamage(1);
+        if (enemyGettingDamaged == 1)
+            enemy1.GetComponent<EnemyAIController>().TakeDamage(1);
+        else if(enemyGettingDamaged == 2)
+            enemy2.GetComponent<EnemyAIController>().TakeDamage(1);
+        else
+            enemy3.GetComponent<EnemyAIController>().TakeDamage(1);
     }
 
 }
