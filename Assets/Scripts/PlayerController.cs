@@ -238,4 +238,9 @@ public class PlayerController : MonoBehaviour
         return closest;
     }
 
+    public void TakeDamage(float damage){
+        hp -= damage;
+        hpBar.SetHPBar(hp);
+    }
+
 }

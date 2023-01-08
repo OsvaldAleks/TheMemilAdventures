@@ -2357,6 +2357,7 @@ MonoBehaviour:
   whatIsObstacle:
     serializedVersion: 2
     m_Bits: 0
+  attackDelay: 1
 --- !u!195 &564622204
 NavMeshAgent:
   m_ObjectHideFlags: 0

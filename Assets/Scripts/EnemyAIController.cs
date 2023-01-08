@@ -6,17 +6,19 @@ using UnityEngine.AI;
 public class EnemyAIController : MonoBehaviour
 {
     public NavMeshAgent agent;
-    public Transform player;
+    public GameObject player;
     public float sightRange;
     public float attackRange;
     public float walkPointRange;
     public Vector3 walkPoint; //point that an enemy will walk towards
     public LayerMask whatIsPlayer, whatIsGround, whatIsObstacle; //variables that start with whatIs = LayerMask variables (apparently)
     private bool isWalkPointSet = false;
+    private bool canAttack = true;
+    public float attackDelay = 4;
 
     void Start()
     {
-        player = GameObject.Find("Player").transform;
+        player = GameObject.Find("Player");
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -67,7 +69,7 @@ public class EnemyAIController : MonoBehaviour
     {
         agent.speed = 10;
         //move towards the player
-        agent.SetDestination(player.position);
+        agent.SetDestination(player.transform.position);
     }
 
     void EnemyAttacking()
@@ -75,5 +77,18 @@ public class EnemyAIController : MonoBehaviour
         //enemy stops moving
         agent.SetDestination(transform.position);
 
+        if(canAttack){
+            //Attack the player
+            
+            Debug.Log("Enemy attacked");
+            player.GetComponent<PlayerController>().TakeDamage(2);
+            canAttack = false;
+            //call this function after attackDelay time
+            Invoke(nameof(ResetAttack), attackDelay);
+        }
+    }
+
+    void ResetAttack(){
+        canAttack = true;
     }
 }
