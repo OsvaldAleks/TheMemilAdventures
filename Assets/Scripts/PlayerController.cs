@@ -24,7 +24,6 @@ public class PlayerController : MonoBehaviour
     public GameObject DeathScreen; 
     public HealthBar hpBar; 
     public AudioSource deathSound;
-    public HealthBar hpBar;
     public AudioSource audio;
     public AudioClip crowd_cheer;
 
