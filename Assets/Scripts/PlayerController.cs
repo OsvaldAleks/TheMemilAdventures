@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     public static bool Dead = false; //if player is dead or not
     public GameObject DeathScreen; 
     public HealthBar hpBar; 
+    public AudioSource deathSound;
 
 
     // Start is called before the first frame update
@@ -148,9 +149,11 @@ public class PlayerController : MonoBehaviour
 
     }
 
+
     void Player_Death()
     {
         anim.SetBool("dead", true);
+        deathSound.Play();
         //Dead = true;
         DeathScreen.SetActive(true); //menu appears
         Time.timeScale = 0f; //freeze time
