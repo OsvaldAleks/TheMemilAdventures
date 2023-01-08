@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
     public UIController deathScoreText;
     public AudioSource audio;
     public AudioClip crowd_cheer;
+    private bool canAttack = true;
+    public float attackDelay = 2;
 
 
     // Start is called before the first frame update
@@ -69,6 +71,11 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(jump * jumpForce, ForceMode.Impulse);
             anim.SetBool("isGrounded", false);
             isGrounded = false;
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Attack();
         }
 
         Vector3 vel;
@@ -247,6 +254,21 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage){
         hp -= damage;
         hpBar.SetHPBar(hp);
+    }
+
+    public void Attack(){
+        if(canAttack){
+            //Attack the player
+            //anim.SetBool("isAttacking", true);
+            Debug.Log("Player attacked");
+            canAttack = false;
+            //call this function after attackDelay time
+            Invoke(nameof(ResetAttack), attackDelay);
+        }
+    }
+
+    void ResetAttack(){
+        canAttack = true;
     }
 
 }
