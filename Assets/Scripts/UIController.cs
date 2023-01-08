@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
-public class HealthBar : MonoBehaviour
+public class UIController : MonoBehaviour
 {
     public Slider slider;
     public Gradient gradient;
     public Image fill;
+    public TextMeshProUGUI scoreText;
 
     public void SetHPBar(float hp)
     {
@@ -21,6 +23,11 @@ public class HealthBar : MonoBehaviour
         slider.value = hp;
 
         fill.color = gradient.Evaluate(1f);
+    }
+
+    public void SetScoreText(int score)
+    {
+        scoreText.text = "Score: " + score.ToString();
     }
 
 }

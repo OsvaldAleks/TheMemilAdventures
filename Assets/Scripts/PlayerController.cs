@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -22,7 +23,8 @@ public class PlayerController : MonoBehaviour
     GameObject cam;
     public static bool Dead = false; //if player is dead or not
     public GameObject DeathScreen; 
-    public HealthBar hpBar; 
+    public UIController hpBar; 
+    public UIController scoreText; 
     public AudioSource deathSound;
     public AudioSource audio;
     public AudioClip crowd_cheer;
@@ -49,6 +51,7 @@ public class PlayerController : MonoBehaviour
         crowd_cheer = (AudioClip)Resources.Load("Sound/crowd-cheer");
 
         hpBar.SetHPMax(hp);
+        scoreText.SetScoreText(score);
     }
 
     // Update is called once per frame
@@ -151,9 +154,9 @@ public class PlayerController : MonoBehaviour
         rb.angularVelocity = new Vector3(0, 0, 0);
         //Vector3.forward je krajše za Vector3(0, 0, 1)
         //transform.Translate(Vector3.forward * dy * Time.deltaTime * speed + Vector3.right * dx * Time.deltaTime * speed/2);
+        scoreText.SetScoreText(score);
 
     }
-
 
     void Player_Death()
     {
@@ -171,6 +174,7 @@ public class PlayerController : MonoBehaviour
         Time.timeScale = 1f; //unfreeze time
         //Dead = false;
         hp = 10;
+        score = 0; 
         hpBar.SetHPMax(hp);
         transform.position = respawnPoint;
         EventSystem.current.SetSelectedGameObject(null); //so resume button isn't in selected mode
