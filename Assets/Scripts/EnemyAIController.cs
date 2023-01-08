@@ -16,6 +16,7 @@ public class EnemyAIController : MonoBehaviour
     private bool canAttack = true;
     public float attackDelay = 4;
     public Animator anim;
+    public float hp = 3;
 
     void Start()
     {
@@ -85,8 +86,6 @@ public class EnemyAIController : MonoBehaviour
             //Attack the player
             anim.SetBool("isAttacking", true);
 
-            Debug.Log("Enemy attacked");
-            
             canAttack = false;
             //call this function after attackDelay time
             Invoke(nameof(ResetAttack), attackDelay);
@@ -103,5 +102,14 @@ public class EnemyAIController : MonoBehaviour
     void DamagePlayer()
     {
         player.GetComponent<PlayerController>().TakeDamage(2);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        //anim.SetBool("dead", true);
+        hp -= damage;
+        if (hp <= 0){
+            Debug.Log("Enemy dead");
+        }
     }
 }

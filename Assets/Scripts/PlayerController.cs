@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip crowd_cheer;
     private bool canAttack = true;
     public float attackDelay = 2;
+    public GameObject enemy1;
 
 
     // Start is called before the first frame update
@@ -41,6 +42,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         audio = GetComponent<AudioSource>();
+        enemy1 = GameObject.Find("Enemy 1");
 
         //at what scores should new pathes be layed
         milestone.Add(2);
@@ -260,10 +262,15 @@ public class PlayerController : MonoBehaviour
         if(canAttack){
             //Attack the player
             anim.SetBool("isAttacking", true);
-            Debug.Log("Player attacked");
             canAttack = false;
             //call this function after attackDelay time
             Invoke(nameof(ResetAttack), attackDelay);
+
+            Vector3 distanceToEnemy = transform.position - enemy1.transform.position;
+            if(distanceToEnemy.magnitude < 1f){
+
+                Invoke(nameof(DamageEnemy), 1f);
+            }
         }
     }
 
@@ -271,6 +278,10 @@ public class PlayerController : MonoBehaviour
     {
         anim.SetBool("isAttacking", false);
         canAttack = true;
+    }
+
+    void DamageEnemy(){
+        enemy1.GetComponent<EnemyAIController>().TakeDamage(1);
     }
 
 }
