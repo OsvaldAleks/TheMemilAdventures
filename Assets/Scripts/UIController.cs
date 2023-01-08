@@ -11,6 +11,7 @@ public class UIController : MonoBehaviour
     public Gradient gradient;
     public Image fill;
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI deathScoreText;
 
     public void SetHPBar(float hp)
     {
@@ -28,6 +29,11 @@ public class UIController : MonoBehaviour
     public void SetScoreText(int score)
     {
         scoreText.text = "Score: " + score.ToString();
+    }
+
+    public void SetDeathsText(int score)
+    {
+        deathScoreText.text = "Deaths: " + score.ToString();
     }
 
 }

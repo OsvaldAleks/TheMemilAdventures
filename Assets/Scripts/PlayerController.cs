@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public Vector3 jump;
     public bool isGrounded;
     public int score;
+    public int deaths;
     public float movementRotation;
     public ArrayList milestone = new ArrayList();
     public Animator anim;
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour
     public GameObject victoryScreen; 
     public UIController hpBar; 
     public UIController scoreText; 
+    public UIController deathScoreText;
     public AudioSource audio;
     public AudioClip crowd_cheer;
 
@@ -48,10 +50,12 @@ public class PlayerController : MonoBehaviour
         jump = new Vector3(0.0f, 2.0f, 0.0f);
 
         score = 0;
+        deaths = 0;
         crowd_cheer = (AudioClip)Resources.Load("Sound/crowd-cheer");
 
         hpBar.SetHPMax(hp);
         scoreText.SetScoreText(score);
+        deathScoreText.SetDeathsText(score);
     }
 
     // Update is called once per frame
@@ -172,6 +176,8 @@ public class PlayerController : MonoBehaviour
         Time.timeScale = 1f; //unfreeze time
         //Dead = false;
         hp = 10;
+        deaths++;
+        deathScoreText.SetDeathsText(deaths);
         hpBar.SetHPMax(hp);
         transform.position = respawnPoint;
         EventSystem.current.SetSelectedGameObject(null); //so resume button isn't in selected mode
