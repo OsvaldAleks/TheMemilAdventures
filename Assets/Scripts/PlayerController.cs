@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
     GameObject cam;
     public static bool Dead = false; //if player is dead or not
     public GameObject DeathScreen; 
+    public HealthBar hpBar; 
+
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +41,8 @@ public class PlayerController : MonoBehaviour
         jump = new Vector3(0.0f, 2.0f, 0.0f);
 
         score = 0;
+
+        hpBar.SetHPMax(hp);
     }
 
     // Update is called once per frame
@@ -127,6 +131,7 @@ public class PlayerController : MonoBehaviour
 
         if (transform.position.y < -20) {
             hp -= Time.deltaTime * 10;
+            hpBar.SetHPBar(hp);
         }
 
         if (hp <= 0) {
@@ -134,6 +139,7 @@ public class PlayerController : MonoBehaviour
             Player_Death();
             //hp and position reset moved to Retry() function
         }
+
         vel = Quaternion.Euler(0, movementRotation, 0) * vel;
         rb.velocity = vel + Vector3.up * rb.velocity.y;
         rb.angularVelocity = new Vector3(0, 0, 0);
@@ -157,6 +163,7 @@ public class PlayerController : MonoBehaviour
         Time.timeScale = 1f; //unfreeze time
         //Dead = false;
         hp = 10;
+        hpBar.SetHPMax(hp);
         transform.position = respawnPoint;
         EventSystem.current.SetSelectedGameObject(null); //so resume button isn't in selected mode
     }
