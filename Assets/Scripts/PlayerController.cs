@@ -23,9 +23,9 @@ public class PlayerController : MonoBehaviour
     GameObject cam;
     public static bool Dead = false; //if player is dead or not
     public GameObject DeathScreen; 
+    public GameObject victoryScreen; 
     public UIController hpBar; 
     public UIController scoreText; 
-    public AudioSource deathSound;
     public AudioSource audio;
     public AudioClip crowd_cheer;
 
@@ -157,11 +157,9 @@ public class PlayerController : MonoBehaviour
         scoreText.SetScoreText(score);
 
     }
-
     void Player_Death()
     {
         anim.SetBool("dead", true);
-        deathSound.Play();
         //Dead = true;
         DeathScreen.SetActive(true); //menu appears
         Time.timeScale = 0f; //freeze time
@@ -174,7 +172,6 @@ public class PlayerController : MonoBehaviour
         Time.timeScale = 1f; //unfreeze time
         //Dead = false;
         hp = 10;
-        score = 0; 
         hpBar.SetHPMax(hp);
         transform.position = respawnPoint;
         EventSystem.current.SetSelectedGameObject(null); //so resume button isn't in selected mode
@@ -184,6 +181,8 @@ public class PlayerController : MonoBehaviour
         GetComponent<AudioSource>().clip = crowd_cheer;
         GetComponent<AudioSource>().loop = false;
         GetComponent<AudioSource>().Play();
+        victoryScreen.SetActive(true);
+        Time.timeScale = 0f;
     }
     void OnCollisionEnter(Collision col)
     {
@@ -201,7 +200,7 @@ public class PlayerController : MonoBehaviour
                 PathController pathScript = FindClosestPath().GetComponent<PathController>();
                 pathScript.changePosition();
             }
-            if (score == 4)
+            if (score == 4) 
             {
                 EndGame();
             }

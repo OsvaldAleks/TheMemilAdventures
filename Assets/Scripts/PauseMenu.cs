@@ -10,6 +10,8 @@ public class PauseMenu : MonoBehaviour
     public GameObject PauseMenuCanvas; //reference to Canvas
     public GameObject AboutCanvas;
     public GameObject gameOverScreen;
+    public GameObject victoryScreen;
+
 
     // Start is called before the first frame update
     void Start()
@@ -22,13 +24,13 @@ public class PauseMenu : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            if(Paused && (AboutCanvas.activeSelf == false) && (gameOverScreen.activeSelf == false))
+            if(Paused && (AboutCanvas.activeSelf == false) && (gameOverScreen.activeSelf == false) && (victoryScreen.activeSelf == false))
             {
                 Play();
                 Debug.Log("Resume");
                 Debug.Log(AboutCanvas.activeSelf);
             }
-            else if(Paused == false)
+            else if(Paused == false && (AboutCanvas.activeSelf == false) && (gameOverScreen.activeSelf == false) && (victoryScreen.activeSelf == false))
             {
                 Debug.Log("Stop");
                 Stop();
