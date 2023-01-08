@@ -3131,8 +3131,8 @@ MonoBehaviour:
   m_text: "Mi\u0161ka Memila je dru\u017Eba zavrgla.\r\nSre\u010Dal je skupino tatov
     in z njimi postal prijatelj.\r\nNa\u0161la jih je kraljeva stra\u017Ea in njegove
     tovari\u0161e zaprla v kletke.\r\nPomagaj Memilu re\u0161iti negove prijatelje.\n\nWASD
-    - premikanje igralca\nMI\u0160KA - premikanje kamere\nSHIFT - tek\nSPACE - skok\r\nESC
-    - meni za premor"
+    - premikanje igralca\nMI\u0160KA - premikanje kamere\nLEFT CLICK - napad\nSHIFT
+    - tek\nSPACE - skok\r\nESC - meni za premor"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5361,7 +5361,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -185}
+  m_AnchoredPosition: {x: 0, y: -209}
   m_SizeDelta: {x: 130, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1123946550
